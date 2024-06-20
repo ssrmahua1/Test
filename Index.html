@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Aadhar Card Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .form-group input[type="file"] {
+            padding: 3px;
+        }
+        .aadhar-card {
+            display: none;
+            margin-top: 20px;
+        }
+        .aadhar-section {
+            width: 100%;
+            height: 350px;
+            background-size: cover;
+            border: 1px solid #000;
+            border-radius: 10px;
+            padding: 10px;
+            position: relative;
+        }
+        .aadhar-front {
+            background-image: url('img.jpg');
+        }
+        .aadhar-back {
+            background-image: url('img.jpg');
+        }
+        .details {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+        }
+        .details p {
+            margin: 5px 0;
+        }
+        .photo-container {
+            position: absolute;
+            top: 80px;
+            left: 20px;
+        }
+        .photo-container img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 1px solid #000;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        .header img {
+            height: 50px;
+        }
+        .header div {
+            text-align: right;
+        }
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+        }
+        .qr-code {
+            position: absolute;
+            right: 20px;
+            top: 100px;
+            width: 100px;
+            height: 100px;
+        }
+        .print-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Manual Aadhar Card Generator</h1>
+        <div class="form-group">
+            <label for="name-hindi">Name (Hindi):</label>
+            <input type="text" id="name-hindi">
+        </div>
+        <div class="form-group">
+            <label for="name-english">Name (English):</label>
+            <input type="text" id="name-english">
+        </div>
+        <div class="form-group">
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob">
+        </div>
+        <div class="form-group">
+            <label for="gender">Gender:</label>
+            <select id="gender">
+                <option value="Male">पुरुष / Male</option>
+                <option value="Female">महिला / Female</option>
+                <option value="Other">अन्य / Other</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="aadhar-number">Aadhar Number:</label>
+            <input type="text" id="aadhar-number">
+        </div>
+        <div class="form-group">
+            <label for="address-hindi">Address (Hindi):</label>
+            <input type="text" id="address-hindi">
+        </div>
+        <div class="form-group">
+            <label for="address-english">Address (English):</label>
+            <input type="text" id="address-english">
+        </div>
+        <div class="form-group">
+            <label for="photo">Photo:</label>
+            <input type="file" id="photo" accept="image/*">
+        </div>
+        <button onclick="generateAadharCard()">Generate Aadhar Card</button>
+
+        <div class="aadhar-card" id="aadhar-card">
+            <div class="aadhar-section aadhar-front">
+                <div class="header">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/4/4d/Government_of_India_logo.svg" alt="Government of India">
+                    <div>
+                        <p>भारत सरकार</p>
+                        <p>Government of India</p>
+                    </div>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Aadhaar_Logo.svg" alt="Aadhaar">
+                </div>
+                <div class="photo-container">
+                    <img id="card-photo" src="" alt="Photo">
+                </div>
+                <div class="details">
+                    <p><strong>नाम:</strong> <span id="card-name-hindi"></span></p>
+                    <p><strong>Name:</strong> <span id="card-name-english"></span></p>
+                    <p><strong>जन्म तिथि / DOB:</strong> <span id="card-dob"></span></p>
+                    <p><strong>लिंग / Gender:</strong> <span id="card-gender"></span></p>
+                    <p><strong>Aadhar Number:</strong> <span id="card-aadhar-number"></span></p>
+                </div>
+                <div class="footer">
+                    <p>मेरा आधार, मेरी पहचान</p>
+                    <p>My Aadhar, My Identity</p>
+                </div>
+            </div>
+
+            <div class="aadhar-section aadhar-back">
+                <div class="header">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/4/4d/Government_of_India_logo.svg" alt="Government of India">
+                    <div>
+                        <p>भारतीय विशिष्ट पहचान प्राधिकरण</p>
+                        <p>Unique Identification Authority of India</p>
+                    </div>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Aadhaar_Logo.svg" alt="Aadhaar">
+                </div>
+                <div class="details">
+                    <p><strong>पता:</strong> <span id="card-address-hindi"></span></p>
+                    <p><strong>Address:</strong> <span id="card-address-english"></span></p>
+                </div>
+                <img class="qr-code" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/QR_code_example.svg/1200px-QR_code_example.svg.png" alt="QR Code">
+            </div>
+        </div>
+
+        <button class="print-button" onclick="printAadharCard()">Print Aadhar Card</button>
+    </div>
+
+    <script>
+        function generateAadharCard() {
+            const nameHindi = document.getElementById('name-hindi').value;
+            const nameEnglish = document.getElementById('name-english').value;
+            const dob = document.getElementById('dob').value;
+            const gender = document.getElementById('gender').value;
+            const aadharNumber = document.getElementById('aadhar-number').value;
+            const addressHindi = document.getElementById('address-hindi').value;
+            const addressEnglish = document.getElementById('address-english').value;
+            const photo = document.getElementById('photo').files[0];
+
+            if (photo) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('card-photo').src = e.target.result;
+                }
+                reader.readAsDataURL(photo);
+            }
+
+            document.getElementById('card-name-hindi').innerText = nameHindi;
+            document.getElementById('card-name-english').innerText = nameEnglish;
+            document.getElementById('card-dob').innerText = dob;
+            document.getElementById('card-gender').innerText = gender;
+            document.getElementById('card-aadhar-number').innerText = aadharNumber;
+            document.getElementById('card-address-hindi').innerText = addressHindi;
+            document.getElementById('card-address-english').innerText = addressEnglish;
+
+            document.getElementById('aadhar-card').style.display = 'block';
+        }
+
+        function printAadharCard() {
+            const card = document.getElementById('aadhar-card').innerHTML;
+            const originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = card;
+            window.print();
+            document.body.innerHTML = originalContent;
+        }
+    </script>
+</body>
+</html>
